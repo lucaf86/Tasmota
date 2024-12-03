@@ -396,16 +396,16 @@
 #endif
 
 #undef USE_EMULATION
-#undef USE_EMULATION_HUE                         // Disable Hue emulation - only for lights and relays
+//#undef USE_EMULATION_HUE                         // Disable Hue emulation - only for lights and relays
 #undef USE_EMULATION_WEMO                        // Disable Wemo emulation - only for relays
 
-//#undef USE_DOMOTICZ                              // Disable Domoticz
+#undef USE_DOMOTICZ                              // Disable Domoticz
 //#undef USE_HOME_ASSISTANT                        // Disable Home Assistant
-//#undef USE_KNX                                   // Disable KNX IP Protocol Support
+#undef USE_KNX                                   // Disable KNX IP Protocol Support
 //#undef USE_CUSTOM                                // Disable Custom features
 //#undef USE_TIMERS                                // Disable support for up to 16 timers
 //#undef USE_TIMERS_WEB                            // Disable support for timer webpage
-//#undef USE_SUNRISE                               // Disable support for Sunrise and sunset tools
+#undef USE_SUNRISE                               // Disable support for Sunrise and sunset tools
 //#undef USE_RULES                                 // Disable support for rules
 #undef USE_DISCOVERY                             // Disable mDNS for the following services (+8k code or +23.5k code with core 2_5_x, +0.3k mem)
 
@@ -469,7 +469,7 @@
   #undef USE_WE517                               // Disable support for Orno WE517-Modbus energy monitor (+1k code)
   #undef USE_MODBUS_ENERGY                       // Disable support for generic modbus energy monitor using a user file in rule space (+5k)
 
-//#undef USE_DS18x20                               // Disable support for DS18x20 sensors with id sort, single scan and read retry (+1k3 code)
+#undef USE_DS18x20                               // Disable support for DS18x20 sensors with id sort, single scan and read retry (+1k3 code)
 
 #undef USE_I2C                                   // Disable all I2C sensors
 #undef USE_SPI                                   // Disable all SPI devices
