@@ -1301,4 +1301,19 @@
 #define D_CHARGING                        "Charging"
 #define D_CAPACITY                        "Capacity"
 
+// albero
+#define D_ALBERO                          "Albero"
+#define D_ALBERO_ON                       "On"
+#define D_ALBERO_OFF                      "Off"
+#define D_ALBERO_EFFECT1                  "Combination"
+#define D_ALBERO_EFFECT2                  "In wave"
+#define D_ALBERO_EFFECT3                  "Sequential"
+#define D_ALBERO_EFFECT4                  "Slow go"
+#define D_ALBERO_EFFECT5                  "Chasing/flash"
+#define D_ALBERO_EFFECT6                  "Slow fade"
+#define D_ALBERO_EFFECT7                  "Twinkle"
+#define D_ALBERO_EFFECT8                  "Steady on"
+#define D_ALBERO_LUM_P                    "Lum +"
+#define D_ALBERO_LUM_M                    "Lum -"
+
 #endif  // _LANGUAGE_EN_GB_H_

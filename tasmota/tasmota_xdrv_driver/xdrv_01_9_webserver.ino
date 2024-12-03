@@ -433,17 +433,21 @@ enum ButtonTitle {
   BUTTON_RESTART, BUTTON_RESET_CONFIGURATION,
   BUTTON_MAIN, BUTTON_CONFIGURATION, BUTTON_INFORMATION, BUTTON_FIRMWARE_UPGRADE, BUTTON_MANAGEMENT,
   BUTTON_MODULE, BUTTON_WIFI, BUTTON_LOGGING, BUTTON_OTHER, BUTTON_TEMPLATE, BUTTON_BACKUP, BUTTON_RESTORE,
-  BUTTON_CONSOLE };
+  BUTTON_CONSOLE, BUTTON_ALBERO_CONFIGURATION, BUTTON_ALBERO_ON, BUTTON_ALBERO_OFF,
+  BUTTON_ALBERO_1, BUTTON_ALBERO_2, BUTTON_ALBERO_3, BUTTON_ALBERO_4, BUTTON_ALBERO_5, BUTTON_ALBERO_6, BUTTON_ALBERO_7, BUTTON_ALBERO_8,
+  BUTTON_ALBERO_LUM_P, BUTTON_ALBERO_LUM_M };
 const char kButtonTitle[] PROGMEM =
   D_RESTART "|" D_RESET_CONFIGURATION "|"
   D_MAIN_MENU "|" D_CONFIGURATION "|" D_INFORMATION "|" D_FIRMWARE_UPGRADE "|" D_MANAGEMENT "|"
   D_CONFIGURE_MODULE "|" D_CONFIGURE_WIFI"|" D_CONFIGURE_LOGGING "|" D_CONFIGURE_OTHER "|" D_CONFIGURE_TEMPLATE "|" D_BACKUP_CONFIGURATION "|" D_RESTORE_CONFIGURATION "|"
-  D_CONSOLE;
+  D_CONSOLE "|" D_ALBERO "|" D_ALBERO_ON "|" D_ALBERO_OFF "|" 
+  D_ALBERO_EFFECT1 "|" D_ALBERO_EFFECT2 "|" D_ALBERO_EFFECT3 "|" D_ALBERO_EFFECT4 "|" D_ALBERO_EFFECT5 "|" D_ALBERO_EFFECT6"|" D_ALBERO_EFFECT7 "|" D_ALBERO_EFFECT8 "|"
+  D_ALBERO_LUM_P "|" D_ALBERO_LUM_M;
 const char kButtonAction[] PROGMEM =
   ".|rt|"
   ".|cn|in|up|mn|"
   "md|wi|lg|co|tp|dl|rs|"
-  "cs";
+  "cs|al|an|af|a1|a2|a3|a4|a5|a6|a7|a8|ap|am";
 const char kButtonConfirm[] PROGMEM = D_CONFIRM_RESTART "|" D_CONFIRM_RESET_CONFIGURATION;
 
 enum CTypes { CT_HTML, CT_PLAIN, CT_XML, CT_STREAM, CT_APP_JSON, CT_APP_STREAM };
@@ -601,7 +605,20 @@ const WebServerDispatch_t WebServerDispatch[] PROGMEM = {
   { "dl", HTTP_ANY, HandleBackupConfiguration },
   { "rs", HTTP_ANY, HandleRestoreConfiguration },
   { "rt", HTTP_ANY, HandleResetConfiguration },
-  { "in", HTTP_ANY, HandleInformation }
+  { "in", HTTP_ANY, HandleInformation },
+  { "al", HTTP_ANY, HandleAlbero },
+  { "al", HTTP_ANY, HandleAlberoOn },
+  { "al", HTTP_ANY, HandleAlberoOff },
+  { "a1", HTTP_ANY, HandleAlberoEffect1 },
+  { "a1", HTTP_ANY, HandleAlberoEffect2 },
+  { "a1", HTTP_ANY, HandleAlberoEffect3 },
+  { "a1", HTTP_ANY, HandleAlberoEffect4 },
+  { "a1", HTTP_ANY, HandleAlberoEffect5 },
+  { "a1", HTTP_ANY, HandleAlberoEffect6 },
+  { "a1", HTTP_ANY, HandleAlberoEffect7 },
+  { "a1", HTTP_ANY, HandleAlberoEffect8 },
+  { "ap", HTTP_ANY, HandleAlberoLumP },
+  { "am", HTTP_ANY, HandleAlberoLumM },
 #endif  // Not FIRMWARE_MINIMAL
 };
 
@@ -1905,12 +1922,132 @@ void HandleConfiguration(void) {
   WSContentButton(BUTTON_OTHER);
   WSContentButton(BUTTON_TEMPLATE);
 
+  WSContentSpaceButton(BUTTON_ALBERO_CONFIGURATION);
+
   WSContentSpaceButton(BUTTON_RESET_CONFIGURATION);
   WSContentButton(BUTTON_BACKUP);
   WSContentButton(BUTTON_RESTORE);
 
   WSContentSpaceButton(BUTTON_MAIN);
   WSContentStop();
+}
+
+void HandleAlbero(void) {
+  if (!HttpCheckPriviledgedAccess()) { return; }
+
+  AddLog(LOG_LEVEL_DEBUG, PSTR(D_LOG_HTTP D_ALBERO));
+
+  WSContentStart_P(PSTR(D_ALBERO));
+  WSContentSendStyle();
+
+  WSContentButton(BUTTON_ALBERO_ON);
+  WSContentButton(BUTTON_ALBERO_OFF);
+
+  WSContentSpaceButton(BUTTON_ALBERO_1);
+  WSContentButton(BUTTON_ALBERO_2);
+  WSContentButton(BUTTON_ALBERO_3);
+  WSContentButton(BUTTON_ALBERO_4);
+  WSContentButton(BUTTON_ALBERO_5);
+  WSContentButton(BUTTON_ALBERO_6);
+  WSContentButton(BUTTON_ALBERO_7);
+  WSContentButton(BUTTON_ALBERO_8);
+
+  WSContentSpaceButton(BUTTON_ALBERO_LUM_P);
+  WSContentButton(BUTTON_ALBERO_LUM_M);
+
+  WSContentSpaceButton(BUTTON_MAIN);
+  WSContentStop();
+}
+
+void HandleAlberoOn(void) {
+  if (!HttpCheckPriviledgedAccess()) { return; }
+
+  AddLog(LOG_LEVEL_DEBUG, PSTR(D_LOG_HTTP D_ALBERO "Albero ON"));
+  ExecuteCommand("IRSend {\"Protocol\":\"NEC\",\"Bits\":32,\"Data\":\"0xFFA25D\",\"DataLSB\":\"0xFF45BA\",\"Repeat\":2}", SRC_IGNORE);
+  HandleAlbero();
+}
+
+void HandleAlberoOff(void) {
+  if (!HttpCheckPriviledgedAccess()) { return; }
+
+  AddLog(LOG_LEVEL_DEBUG, PSTR(D_LOG_HTTP D_ALBERO "Albero OFF"));
+  ExecuteCommand("IRSend {\"Protocol\":\"NEC\",\"Bits\":32,\"Data\":\"0xFFE21D\",\"DataLSB\":\"0xFF47B8\",\"Repeat\":2}", SRC_IGNORE);
+  HandleAlbero();
+}
+
+void HandleAlberoEffect1(void) {
+  if (!HttpCheckPriviledgedAccess()) { return; }
+
+  AddLog(LOG_LEVEL_DEBUG, PSTR(D_LOG_HTTP D_ALBERO "effect1"));
+  ExecuteCommand("IRSend {\"Protocol\":\"NEC\",\"Bits\":32,\"Data\":\"0xFF22DD\",\"DataLSB\":\"0xFF44BB\",\"Repeat\":2}", SRC_IGNORE);
+  HandleAlbero();
+}
+
+void HandleAlberoEffect2(void) {
+  if (!HttpCheckPriviledgedAccess()) { return; }
+
+  AddLog(LOG_LEVEL_DEBUG, PSTR(D_LOG_HTTP D_ALBERO "effect2"));
+  ExecuteCommand("IRSend {\"Protocol\":\"NEC\",\"Bits\":32,\"Data\":\"0xFFC23D\",\"DataLSB\":\"0xFF43BC\",\"Repeat\":2}", SRC_IGNORE);
+  HandleAlbero();
+}
+
+void HandleAlberoEffect3(void) {
+  if (!HttpCheckPriviledgedAccess()) { return; }
+
+  AddLog(LOG_LEVEL_DEBUG, PSTR(D_LOG_HTTP D_ALBERO "effect3"));
+  ExecuteCommand("IRSend {\"Protocol\":\"NEC\",\"Bits\":32,\"Data\":\"0xFFE01F\",\"DataLSB\":\"0xFF07F8\",\"Repeat\":2}", SRC_IGNORE);
+  HandleAlbero();
+}
+void HandleAlberoEffect4(void) {
+  if (!HttpCheckPriviledgedAccess()) { return; }
+
+  AddLog(LOG_LEVEL_DEBUG, PSTR(D_LOG_HTTP D_ALBERO "effect4"));
+  ExecuteCommand("IRSend {\"Protocol\":\"NEC\",\"Bits\":32,\"Data\":\"0xFF906F\",\"DataLSB\":\"0xFF09F6\",\"Repeat\":2}", SRC_IGNORE);
+  HandleAlbero();
+}
+void HandleAlberoEffect5(void) {
+  if (!HttpCheckPriviledgedAccess()) { return; }
+
+  AddLog(LOG_LEVEL_DEBUG, PSTR(D_LOG_HTTP D_ALBERO "effect5"));
+  ExecuteCommand("IRSend {\"Protocol\":\"NEC\",\"Bits\":32,\"Data\":\"0xFF6897\",\"DataLSB\":\"0xFF16E9\",\"Repeat\":2}", SRC_IGNORE);
+  HandleAlbero();
+}
+void HandleAlberoEffect6(void) {
+  if (!HttpCheckPriviledgedAccess()) { return; }
+
+  AddLog(LOG_LEVEL_DEBUG, PSTR(D_LOG_HTTP D_ALBERO "effect6"));
+  ExecuteCommand("IRSend {\"Protocol\":\"NEC\",\"Bits\":32,\"Data\":\"0xFFB04F\",\"DataLSB\":\"0xFF0DF2\",\"Repeat\":2}", SRC_IGNORE);
+  HandleAlbero();
+}
+void HandleAlberoEffect7(void) {
+  if (!HttpCheckPriviledgedAccess()) { return; }
+
+  AddLog(LOG_LEVEL_DEBUG, PSTR(D_LOG_HTTP D_ALBERO "effect7"));
+  ExecuteCommand("IRSend {\"Protocol\":\"NEC\",\"Bits\":32,\"Data\":\"0xFF30CF\",\"DataLSB\":\"0xFF0CF3\",\"Repeat\":2}", SRC_IGNORE);
+  HandleAlbero();
+}
+void HandleAlberoEffect8(void) {
+  if (!HttpCheckPriviledgedAccess()) { return; }
+
+  AddLog(LOG_LEVEL_DEBUG, PSTR(D_LOG_HTTP D_ALBERO "effect8"));
+  ExecuteCommand("IRSend {\"Protocol\":\"NEC\",\"Bits\":32,\"Data\":\"0xFF7A85\",\"DataLSB\":\"0xFF5EA1\",\"Repeat\":2}", SRC_IGNORE);
+  HandleAlbero();
+}
+
+void HandleAlberoLumP(void) {
+  if (!HttpCheckPriviledgedAccess()) { return; }
+
+  AddLog(LOG_LEVEL_DEBUG, PSTR(D_LOG_HTTP D_ALBERO "lum +"));
+  ExecuteCommand("IRSend {\"Protocol\":\"NEC\",\"Bits\":32,\"Data\":\"0xFF5AA5\",\"DataLSB\":\"0xFF5AA5\",\"Repeat\":2}", SRC_IGNORE);
+  HandleAlbero();
+}
+
+void HandleAlberoLumM(void) {
+  if (!HttpCheckPriviledgedAccess()) { return; }
+
+  AddLog(LOG_LEVEL_DEBUG, PSTR(D_LOG_HTTP D_ALBERO "lum -"));
+  ExecuteCommand("IRSend {\"Protocol\":\"NEC\",\"Bits\":32,\"Data\":\"0xFF10EF\",\"DataLSB\":\"0xFF08F7\",\"Repeat\":2}", SRC_IGNORE);
+  HandleAlbero();
 }
 
 /*********************************************************************************************\
